@@ -49,7 +49,5 @@ passwordTextbox = driver.find_element(By.ID, "SignIn-passwordInput")
 passwordTextbox.send_keys(options.password)
 passwordTextbox.send_keys(Keys.ENTER)
 
-a = 0/1 #ADDED A BUG
-
 # Close the browser window
 driver.quit()
