@@ -49,11 +49,7 @@ passwordTextbox = driver.find_element(By.ID, "SignIn-passwordInput")
 passwordTextbox.send_keys(options.password)
 passwordTextbox.send_keys(Keys.ENTER)
 
-
-# Navigate to the Kroger "My Purchases" page
-driver.get('https://www.kroger.com/mypurchases')
-
-# TODO: Add code to perform login and interact with the page to retrieve information
+a = 0/1 #ADDED A BUG
 
 # Close the browser window
 driver.quit()
