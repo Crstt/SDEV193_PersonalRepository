@@ -1,6 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.common.exceptions import NoSuchElementException
 
 class Options:
     def __init__(self, file_path):
@@ -17,6 +19,33 @@ class Options:
                 elif key == 'password':
                     self.password = value
 
+def closePopUp():
+    elements = driver.find_elements(By.CLASS_NAME, "kds-Modal-closeButton")
+
+    # Check if the element exists
+    if len(elements) > 0:
+        # Element exists, perform an action
+        element = elements[0]
+        # Perform action on the element
+        element.click()
+    else:
+        # Element doesn't exist, do nothing
+        return
+    
+def hoverWelcomeButton():
+    try:
+        # Attempt to find the first element
+        element = driver.find_element(By.CLASS_NAME, "Welcome-container--desktop")
+        ActionChains(driver).move_to_element(element).perform()
+    except NoSuchElementException:
+        try:
+            # First element not found, try finding the second element
+            element = driver.find_element(By.CLASS_NAME, "Welcome-container--mobile")
+            ActionChains(driver).move_to_element(element).perform()
+        except NoSuchElementException:
+            # Neither element found, handle the situation
+            print("Both elements not found")
+
 # Example usage
 options_file = 'options.txt'  # Replace with the actual path to your options file
 
@@ -24,30 +53,44 @@ options = Options(options_file)
 
 # Set the path to your Chrome webdriver executable
 #webdriver_path = 'chromedriver.exe' 
-webdriver_path = 'C:/Program Files/Google/Chrome/Application/chrome.exe' 
+#webdriver_path = 'C:/Program Files/Google/Chrome/Application/chrome.exe' 
+#webdriver_path = 'C:/Program Files/Mozilla Firefox/firefox.exe'
 
 # Configure Chrome options
 chrome_options = webdriver.ChromeOptions()
-#chrome_options.add_argument('--headless')  # Run Chrome in headless mode (without GUI)
+chrome_options.add_argument('--headless')  # Run Chrome in headless mode (without GUI)
 chrome_options.binary_location = 'C:/Program Files/Google/Chrome/Application/chrome.exe' 
+#chrome_options.page_load_strategy = 'eager'
 
 chrome_options.add_argument("--disable-blink-features=AutomationControlled") 
+chrome_options.add_argument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
 chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"]) 
 chrome_options.add_experimental_option("useAutomationExtension", False) 
 
 # Create a new instance of Chrome driver
 driver = webdriver.Chrome(options=chrome_options)
 
-driver.get('https://www.kroger.com/signin?redirectUrl=/mypurchases')
+driver.get('https://www.kroger.com')
+#driver.get('https://www.kroger.com/signin?redirectUrl=/mypurchases')
 
-button = driver.find_element(By.CLASS_NAME, "kds-Modal-closeButton")
+closePopUp()
+
+driver.save_screenshot('screenshot.png')
+hoverWelcomeButton()
+driver.save_screenshot('screenshot.png')
+
+button = driver.find_element(By.CLASS_NAME, "WelcomeMenu-signIn-button")
 button.click()
+
+closePopUp()
 
 emailTextbox = driver.find_element(By.ID, "SignIn-emailInput")
 emailTextbox.send_keys(options.email)
 passwordTextbox = driver.find_element(By.ID, "SignIn-passwordInput")
 passwordTextbox.send_keys(options.password)
 passwordTextbox.send_keys(Keys.ENTER)
+
+driver.save_screenshot('screenshot.png')
 
 # Close the browser window
 driver.quit()
