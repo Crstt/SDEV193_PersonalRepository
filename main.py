@@ -95,6 +95,7 @@ driver.get('https://www.kroger.com')
 #driver.get('https://www.kroger.com/signin?redirectUrl=/mypurchases')
 
 time.sleep(1)
+
 closePopUp()
 
 driver.save_screenshot('screenshot.png')
