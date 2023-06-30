@@ -1,2 +1,2 @@
-email=example@gmail.com
-password=reallyStrongPassword01
+email=rodrca01@gmail.com
+password=bisbal07
