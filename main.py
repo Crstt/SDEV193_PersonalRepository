@@ -42,7 +42,6 @@ class Receipt:
 
 class Item(Receipt):
     def __init__(self, name, price, originalPrice=-1):
-        super().__init__(items=None)
         self.name = name
         self.price = price
         self.originalPrice = price if originalPrice == -1 else originalPrice
